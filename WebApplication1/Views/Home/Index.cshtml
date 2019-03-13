@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<h1>BingGo Game</h1>
+
+<form>
+
+    <h2 id="wingame"></h2>
+    <table>
+        @{
+            var no = 0;
+            for (var r = 0; r < 5; r++)
+            {
+                <tr>
+                    @for (var i = 0; i < 5; i++)
+                    {
+                        no++;
+
+                        <td>
+                            <input type="button" name="biggo" value="@r-@i-&nbsp;&nbsp;&nbsp;@no" data-x="@r" data-y="@i" style="text-indent: -40px; width:37px;" />
+                        </td>
+                    }
+                </tr>
+            }
+
+        }
+    </table>
+    <button type="submit"> refresh</button>
+
+</form>
+
+<hr />
+
+<h1>Formula calculation</h1>
+<form action="/home" method="post">
+    <h2>@ViewBag.result</h2>
+    <label>Input Formula </label>
+    <input name="cal" type="text" />
+    <input type="submit" value="Send" />
+</form>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            var databigo = Create2DArray(5, 5);
+
+            $('input[name="biggo"]').click(function () {
+                var x = $(this).attr("data-x");
+                var y = $(this).attr("data-y");
+                $(this).css("background-color", "green");
+
+                databigo[x][y] = 1;
+
+                var r = 0;
+                var c = 0;
+
+                for (var x = 0; x < 5; x++) {
+
+
+                    for (var y = 0; y < 5; y++) {
+
+                        var p = parseInt(databigo[x][y]);
+                        c = c + (isNaN(p) ? 0 : p);
+
+                        var p2 = parseInt(databigo[y][x]);
+
+                        r = r + (isNaN(p2) ? 0 : p2);
+
+
+                    }
+
+                    if (r == 5 || c == 5) {
+                        $("#wingame").html("Win Game !!");
+                    }
+
+                   // console.log("x = " + x + " y = " + y + "  row = " + r + " col " + c);
+                    r = 0;
+                    c = 0;
+                }
+
+               
+
+            });
+        });
+
+        function Create2DArray(rows, columns) {
+            var x = new Array(rows);
+            for (var i = 0; i < rows; i++) {
+                x[i] = new Array(columns);
+            }
+            return x;
+        }
+
+    </script>
+}
